@@ -1,0 +1,10 @@
+package CameraRental;
+
+public class ViewCameras {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
