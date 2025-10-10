@@ -21,7 +21,7 @@ public class ShowOptions {
                 new RentACamera();
                 break;
             case 3:
-                new ViewCameras();
+                new ViewAllCameras();
                 break;
             case 4:
                 new MyWallet();
