@@ -18,13 +18,13 @@ public class ShowOptions {
                 new MyCamera().main(null);
                 break;
             case 2:
-                new RentACamera();
+                new RentACamera().main(null);;
                 break;
             case 3:
-                new ViewAllCameras();
+                new ViewAllCameras().main(null);
                 break;
             case 4:
-                new MyWallet();
+                new MyWallet().main(null);;
                 break;
             case 5:
                 System.out.println("Thank you for using Camera Rental. Goodbye!");

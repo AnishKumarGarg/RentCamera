@@ -23,18 +23,61 @@ public class MyCamera {
 	}
 	
 	static List<Camera> cameras=new ArrayList<Camera>(); //Create list of cameras
-	static int nextId=1;
-	
 	
 	public static void Add(String Brand, String Model, double price) {
-		//Code to add the camera into View Cameras
-		cameras.add(new Camera(nextId++, Brand, Model, price));
+		int id = CameraRental.CameraIdGenerator.getNextId();
+		
+	    cameras.add(new Camera(id, Brand, Model, price));
+
+	    CameraRental.ViewAllCameras.ViewCameras.Cameras.add(
+	        new CameraRental.ViewAllCameras.ViewCameras(id, Brand, Model, price, "Available")
+	    );
+	}
+	public static void Remove(int IdToRemove) {
+	    boolean removedFromMyList = false;
+
+	    // Remove from MyCamera's list
+	    for (int i = 0; i < cameras.size(); i++) {
+	        if (cameras.get(i).id == IdToRemove) {
+	            cameras.remove(i);
+	            removedFromMyList = true;
+	            break;
+	        }
+	    }
+
+	    // Remove from ViewAllCameras list
+	    boolean removedFromAllList = false;
+	    List<ViewAllCameras.ViewCameras> allCameras = CameraRental.ViewAllCameras.ViewCameras.Cameras;
+	    for (int i = 0; i < allCameras.size(); i++) {
+	        if (allCameras.get(i).id == IdToRemove) {
+	            allCameras.remove(i);
+	            removedFromAllList = true;
+	            break;
+	        }
+	    }
+
+	    if (removedFromMyList==true && removedFromAllList==true) {
+			System.out.println("Camera successfully removed from the list");
+		}
+	    else {
+	    	System.out.println("Camera does not exist");
+	    }
+	}	
+	private static void renumberCameraIds() {
+	    int newId = 1;
+
+	    // Renumber MyCamera list
+	    for (Camera cam : cameras) {
+	        cam.id = newId++;
+	    }
+
+	    // Renumber ViewAllCameras list
+	    newId = 1;
+	    for (ViewAllCameras.ViewCameras cam : CameraRental.ViewAllCameras.ViewCameras.Cameras) {
+	        cam.id = newId++;
+	    }
 	}
 	
-	public static void Remove(int IdToRemove) {
-		cameras.remove(IdToRemove-1);
-		
-	}
 		public static void ViewCameras() {
 		    System.out.println("=============================================================================");
 		    System.out.printf("%-15s%-20s%-20s%-15s%n", "Camera ID", "Brand", "Model", "Price Per Day");
@@ -75,7 +118,7 @@ public class MyCamera {
 			System.out.print("Enter the camera ID to remove - ");
 			int IdToRemove=sc.nextInt();
 			Remove(IdToRemove);
-			System.out.println("Camera successfully removed from the list.");
+			renumberCameraIds();
 		}
 		
 		if (SelectedOption==3) {
