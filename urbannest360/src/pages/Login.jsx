@@ -1,3 +1,5 @@
+import confetti from "canvas-confetti";
+
 import { useEffect, useRef, useState } from "react";
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
@@ -11,7 +13,7 @@ export default function Login() {
 
   const togglePassword = () => setShowPassword((p) => !p);
 
-  // ✅ Track current user state
+  //track current user state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -19,46 +21,37 @@ export default function Login() {
     return () => unsubscribe();
   }, []);
 
-  // ✅ Login function
+  // login function and confetti
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("Login successful!");
+      alert("✅Login successful!");
+      confetti({
+        particleCount:200,
+        spread:100,
+        gravity:0.7,
+        origin:{y:0.55},
+        angle:90,
+        ticks:180,
+       colors:[
+        '#BC6C25','#DDA15E', '#FEFAE0','#606C38','#283618','#FF8C42','#F4A261','#8B5A2B'
+      ],
+        shapes:['circle']
+      });
+      setTimeout(()=>{
+      window.location.href="/landing.html";
+      },800);
     } catch (error) {
-      alert("Error: " + error.message);
+      alert("❌" + error.message);
     }
   };
 
-  // ✅ Logout function
-  const handleLogout = async () => {
-    await signOut(auth);
-    alert("You have been logged out.");
-  };
-
-  // ✅ Autoplay background video
+  //background video
   useEffect(() => {
     if (videoRef.current) videoRef.current.play().catch(() => {});
   }, []);
 
-  // If logged in — show welcome screen
-  if (user) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen bg-gray-900 text-white">
-        <h1 className="text-3xl mb-4 font-semibold">
-          Welcome, {user.displayName || user.email} 👋
-        </h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition"
-        >
-          Logout
-        </button>
-      </div>
-    );
-  }
-
-  // If not logged in — show login form
   return (
     <div className="min-h-screen flex justify-center items-center relative overflow-hidden">
       <video

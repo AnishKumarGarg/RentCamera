@@ -147,24 +147,26 @@ export default function Register() {
 
   const togglePassword = () => setShowPassword((p) => !p);
 
-  // ✅ Firebase Registration
+  // registration
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if(!/^\d{10}$/.test(mobile)){
+      alert("❌ Mobile number must be exactly 10 digits.");
+      return;
+    }
+
     try {
-      // Firebase Auth (only email + password)
+      // authentication (only email + password)
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-
-      // ✅ Additional fields (name, mobile) you can store in Firestore later if you want
-
       alert("Registration successful! Please login now.");
       window.location.href = "/";
     } catch (error) {
-      alert("Error: " + error.message);
+      alert("❌" + error.message);
     }
   };
 
@@ -216,6 +218,9 @@ export default function Register() {
               required
               value={mobile}
               onChange={(e) => setMobile(e.target.value)}
+              maxLength={10}
+              pattern="[0-9]{10}"
+              title="Mobile number must be exactly 10 digits"
               className="border-2 border-black rounded p-1 sm:p-2 text-sm md:text-base w-full"
             />
 
